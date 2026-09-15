@@ -1,0 +1,8 @@
+{
+  "name": "apply-layer-convention",
+  "version": "0.1.0",
+  "description": "層、CQRS、整合性の置き場を適用する公開入口",
+  "skills": "./",
+  "metadata": {"harness": {"contractVersion": 1}}
+}
+

@@ -1,0 +1,64 @@
+{
+  "name": "development-convention",
+  "version": "0.1.0",
+  "description": "言語非依存の開発規約（論理責務・CommandとQuery・複数集約の整合性）、内側から外へ進める開発プロセス（BDD ゲート・ATDD）、YAGNI を配布する",
+  "author": {
+    "name": "NaoyaNakamori"
+  },
+  "skills": [
+    "./playbooks/development-convention/apply-layer-convention",
+    "./playbooks/development-convention/develop-inside-out",
+    "./playbooks/development-convention/apply-yagni"
+  ],
+  "interface": {
+    "displayName": "Development Convention",
+    "shortDescription": "言語非依存の層の規約・開発プロセス・YAGNI",
+    "longDescription": "ドメイン・集約リポジトリ・ユースケース・外部境界の論理責務と依存方向、CommandとQueryの分離、複数集約をまたぐ整合性の置き場、BDD 資料のテストをゲートにして内側から外へ進める ATDD の開発プロセス、資料に無いものを作らない YAGNI を適用します。",
+    "developerName": "NaoyaNakamori",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "この判断はどの論理責務に置く？依存方向も決めて。",
+      "この資料一式から内側の層から順に実装して。",
+      "このコードに資料に無いものが混ざっていないか見て。"
+    ]
+  },
+  "metadata": {
+    "harness": {
+      "installationSurface": "playbook-package",
+      "marketplace": "development-convention",
+      "playbooks": {
+        "apply-layer-convention": "./playbooks/development-convention/apply-layer-convention",
+        "develop-inside-out": "./playbooks/development-convention/develop-inside-out",
+        "apply-yagni": "./playbooks/development-convention/apply-yagni"
+      },
+      "internalPlugins": {
+        "apply-layer-convention": "./skills/apply-layer-convention",
+        "develop-inside-out": "./skills/develop-inside-out",
+        "apply-yagni": "./skills/apply-yagni"
+      },
+      "implements": [
+        {
+          "id": "development-convention/apply-layer-convention",
+          "version": 1,
+          "kind": "playbook",
+          "playbook": "apply-layer-convention"
+        },
+        {
+          "id": "development-convention/develop-inside-out",
+          "version": 1,
+          "kind": "playbook",
+          "playbook": "develop-inside-out"
+        },
+        {
+          "id": "development-convention/apply-yagni",
+          "version": 1,
+          "kind": "playbook",
+          "playbook": "apply-yagni"
+        }
+      ]
+    }
+  }
+}

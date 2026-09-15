@@ -1,0 +1,19 @@
+version: 2
+name: apply-layer-convention
+description: 論理責務・依存方向・CommandとQueryの分離・複数集約の整合性の置き場を、言語を問わず決める。同名の内部skillへ1工程でルーティングする独立プレイブック
+instructions:
+  execution:
+    directive: 対応する内部skillだけを実行し、他の関心の規約を暗黙に適用しない
+focus: layer-convention-application
+requires: []
+contract:
+  inputs: [request, target_repository, target_scope, domain_rule, domain_model, rdb_logical_data_modeling, existing_code]
+  excluded_concerns: [requirements_discovery, feature_delivery, unnecessary_public_surface_review, cloud_design]
+  outcome:
+    result: ${layer_application}
+steps:
+  - id: apply
+    skill: apply-layer-convention
+    purpose: 層と置き場と整合性の守り方を対象コードへ適用する
+    needs: [request, target_repository, target_scope, domain_rule, domain_model, rdb_logical_data_modeling, existing_code]
+    provides: [layer_application]

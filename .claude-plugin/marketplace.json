@@ -1,0 +1,15 @@
+{
+  "name": "development-convention",
+  "owner": {
+    "name": "NaoyaNakamori"
+  },
+  "description": "言語非依存の開発規約（層の定義・CQRS の構成・複数集約の整合性）と開発プロセス（内側から外へ・BDD ゲート・ATDD）と YAGNI を配布する単一 package marketplace",
+  "plugins": [
+    {
+      "name": "development-convention",
+      "source": "./plugins/development-convention",
+      "description": "層の規約・内側から外へ進める開発プロセス・YAGNI の 3 つの独立した入口を提供する",
+      "version": "0.1.0"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "develop-inside-out",
+  "version": "0.1.0",
+  "description": "BDD資料をゲートに内側から外へ実装する公開入口",
+  "skills": "./",
+  "metadata": {"harness": {"contractVersion": 1}}
+}
+
