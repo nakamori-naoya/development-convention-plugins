@@ -1,18 +1,19 @@
 # development-convention-plugins
 
-言語に依存しない開発規約を、独立した三つの公開入口として配布するrepositoryである。
+言語に依存しない開発規約を、独立した四つの公開入口として配布するrepositoryである。
 
 ## 公開入口
 
 - `apply-layer-convention`: 四層、CQRSの読み書き分離、複数集約の整合性をコードへ適用する。
 - `develop-inside-out`: BDD資料を検証可能なゲートへ写し、内側から外側へ機能を実装する。
 - `apply-yagni`: 現在の正本資料とそこから導いたテストが要求しない公開シンボルを作らず、残さない。
+- `fix-root-cause`: 不具合の症状を正本資料と突き合わせて再現テストを赤にし、全呼び出し経路が経由する最も内側の一か所を最小の変更で直す。
 
-marketplaceが公開・インストールするのは`development-convention` package一件だけである。package manifestは三つの自己完結skillを`skills/`から直接公開し、存在確認だけのprepare、外側のrouting playbook、入口別manifestを挟まない。各skill直下の`playbook.yml` v2が一つの仕事の工程順序を保持し、公開`SKILL.md`から同じagentが宣言順に辿る。
+marketplaceが公開・インストールするのは`development-convention` package一件だけである。package manifestは四つの自己完結skillを`skills/`から直接公開し、存在確認だけのprepare、外側のrouting playbook、入口別manifestを挟まない。各skill直下の`playbook.yml` v2が一つの仕事の工程順序を保持し、公開`SKILL.md`から同じagentが宣言順に辿る。
 
 ## 責務の境界
 
-各入口は単独で利用できる。層の配置判断、機能の実装手順、不要な公開面の削減を暗黙に連鎖させない。対象コードや正本資料が不足し、判断によって結果が変わる場合は推測せず停止する。
+各入口は単独で利用できる。層の配置判断、機能の実装手順、不要な公開面の削減、不具合の根本原因修正を暗黙に連鎖させない。対象コードや正本資料が不足し、判断によって結果が変わる場合は推測せず停止する。
 
 規約の正本は`decisions/development-convention-plugins.jsonl`である。過去の決定は書き換えず、変更は新しい記録を追記する。
 
