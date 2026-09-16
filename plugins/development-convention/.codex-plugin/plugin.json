@@ -6,9 +6,9 @@
     "name": "NaoyaNakamori"
   },
   "skills": [
-    "./playbooks/development-convention/apply-layer-convention",
-    "./playbooks/development-convention/develop-inside-out",
-    "./playbooks/development-convention/apply-yagni"
+    "./skills/apply-layer-convention",
+    "./skills/develop-inside-out",
+    "./skills/apply-yagni"
   ],
   "interface": {
     "displayName": "Development Convention",
@@ -27,38 +27,8 @@
   },
   "metadata": {
     "harness": {
-      "installationSurface": "playbook-package",
       "marketplace": "development-convention",
-      "playbooks": {
-        "apply-layer-convention": "./playbooks/development-convention/apply-layer-convention",
-        "develop-inside-out": "./playbooks/development-convention/develop-inside-out",
-        "apply-yagni": "./playbooks/development-convention/apply-yagni"
-      },
-      "internalPlugins": {
-        "apply-layer-convention": "./skills/apply-layer-convention",
-        "develop-inside-out": "./skills/develop-inside-out",
-        "apply-yagni": "./skills/apply-yagni"
-      },
-      "implements": [
-        {
-          "id": "development-convention/apply-layer-convention",
-          "version": 1,
-          "kind": "playbook",
-          "playbook": "apply-layer-convention"
-        },
-        {
-          "id": "development-convention/develop-inside-out",
-          "version": 1,
-          "kind": "playbook",
-          "playbook": "develop-inside-out"
-        },
-        {
-          "id": "development-convention/apply-yagni",
-          "version": 1,
-          "kind": "playbook",
-          "playbook": "apply-yagni"
-        }
-      ]
+      "contractVersion": 1
     }
   }
 }

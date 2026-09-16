@@ -8,7 +8,7 @@
 - `develop-inside-out`: BDD資料を検証可能なゲートへ写し、内側から外側へ機能を実装する。
 - `apply-yagni`: 現在の正本資料とそこから導いたテストが要求しない公開シンボルを作らず、残さない。
 
-marketplaceが公開・インストールするのは`development-convention` package一件だけである。三つの内部実装はpackageに同梱するが、独立したインストール対象にはしない。
+marketplaceが公開・インストールするのは`development-convention` package一件だけである。package manifestは三つの自己完結skillを`skills/`から直接公開し、存在確認だけのprepare、外側のrouting playbook、入口別manifestを挟まない。各skill直下の`playbook.yml` v2が一つの仕事の工程順序を保持し、公開`SKILL.md`から同じagentが宣言順に辿る。
 
 ## 責務の境界
 
@@ -23,5 +23,4 @@ PYTHONDONTWRITEBYTECODE=1 bash /Users/naoya-nakamoriq/Documents/Github/harness-p
 PYTHONDONTWRITEBYTECODE=1 bash /Users/naoya-nakamoriq/Documents/Github/harness-pluginsv2/scripts/validate.sh /Users/naoya-nakamoriq/Documents/Github/harness-pluginsv2/development-convention-plugins
 ```
 
-repository固有検証は、manifest、公開境界、内部文書の自己完結性、日本語中心の記述、典型例・負例・境界例の判断を検査する。
-
+repository固有検証は、manifest、直接公開境界、各skill文書の自己完結性に加え、隣接`playbook.yml`のidentity、宣言順、`agent_work: invoking_agent`、実値を使う場合のneeds/provides接続を検査する。文章や判断の意味品質は対象を実読して評価する。

@@ -8,6 +8,7 @@ status=0
 
 PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/scripts/validate_repository.py" "$ROOT" || status=1
 PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/scripts/validate_repository.py" --self-test "$ROOT" || status=1
+PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/scripts/validate_skill_playbooks.py" "$ROOT/plugins/development-convention" --self-test || status=1
 
 while IFS= read -r script; do
   bash -n "$script" || status=1
@@ -27,4 +28,3 @@ else
   echo 'Validation: failed'
 fi
 exit "$status"
-
