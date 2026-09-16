@@ -1,6 +1,6 @@
 {
   "name": "development-convention",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "言語非依存の開発規約（論理責務・CommandとQuery・複数集約の整合性）、内側から外へ進める開発プロセス（BDD ゲート・ATDD）、YAGNI を配布する",
   "author": {
     "name": "NaoyaNakamori"
