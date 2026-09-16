@@ -1,0 +1,27 @@
+version: 2
+name: fix-root-cause
+description: 症状から根本原因の一か所へ辿り、同じagentが宣言順に再現・列挙・修正・検査を完了する。
+inputs: [request, references, target_repository, symptom_report, canonical_artifacts, existing_tests, call_search_method]
+instructions:
+  execution:
+    directive: 同じagentがstepsを上から順に実行し、失敗した工程を成功扱いせず停止する
+requires: []
+steps:
+  - id: fix-symptom-and-expected
+    agent_work: invoking_agent
+    purpose: "症状と期待状態を正本へ固定する"
+  - id: reproduce-red
+    agent_work: invoking_agent
+    purpose: "症状を再現テストで赤にする"
+  - id: enumerate-call-paths
+    agent_work: invoking_agent
+    purpose: "呼び出し経路を列挙する"
+  - id: locate-common-point
+    agent_work: invoking_agent
+    purpose: "共通点の一か所を決める"
+  - id: apply-minimal-fix-and-green
+    agent_work: invoking_agent
+    purpose: "最小の変更で緑にする"
+  - id: report-trace-and-changes
+    agent_work: invoking_agent
+    purpose: "根拠と変更を報告する"

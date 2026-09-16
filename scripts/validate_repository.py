@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path
 
 
-IDS = ("apply-layer-convention", "develop-inside-out", "apply-yagni")
+IDS = ("apply-layer-convention", "develop-inside-out", "apply-yagni", "fix-root-cause")
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 
 
@@ -132,7 +132,7 @@ def validate_public(package: Path, manifest: dict) -> None:
         fail("自己完結skillへplaybook包装を強制してはいけません")
     expected = [f"./skills/{identifier}" for identifier in IDS]
     if manifest.get("skills") != expected:
-        fail("manifestのskillsが直接公開する三skillと一致しません")
+        fail("manifestのskillsが直接公開するskillと一致しません")
     for identifier in IDS:
         entry = package / "skills" / identifier / "SKILL.md"
         assert_regular(entry, "直接公開skill")
@@ -144,7 +144,7 @@ def validate_repository(repository: Path) -> None:
     if not repository.is_absolute() or repository.is_symlink() or not repository.is_dir():
         fail(f"repositoryは実在する絶対directoryでなければなりません: {repository}")
     codex, claude = catalog_entry(repository, "codex"), catalog_entry(repository, "claude")
-    if codex != claude or codex != ("development-convention", "2.0.0", "./plugins/development-convention"):
+    if codex != claude or codex != ("development-convention", "3.0.0", "./plugins/development-convention"):
         fail("runtime間の公開package identityが一致しません")
     package = repository / "plugins/development-convention"
     manifests = [load_json(package / f".{runtime}-plugin/plugin.json") for runtime in ("codex", "claude")]
@@ -228,7 +228,7 @@ description: 構造契約だけを満たす境界fixture
         path = root / package / "skills/apply-yagni/SKILL.md"
         path.write_text(path.read_text(encoding="utf-8").replace("name: apply-yagni\n", "", 1), encoding="utf-8")
 
-    expect_rejected(repository, "存在しないskillの公開", "三skillと一致", add_missing_skill)
+    expect_rejected(repository, "存在しないskillの公開", "skillと一致", add_missing_skill)
     expect_rejected(repository, "直接参照資料の欠落", "直接参照資料", remove_reference)
     expect_rejected(repository, "内部入口の兄弟認識", "兄弟identity", add_sibling)
     expect_rejected(repository, "本文だけの偽name", "frontmatter name", body_only_name)

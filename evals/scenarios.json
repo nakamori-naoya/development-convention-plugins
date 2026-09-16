@@ -28,6 +28,38 @@
           "meaning": "判定だけの依頼に対して除去や実装変更へ進まず、次の行動と未決を示す"
         }
       ]
+    },
+    {
+      "id": "fix-root-cause-common-point",
+      "skill": "../plugins/development-convention/skills/fix-root-cause/SKILL.md",
+      "resources": [
+        "../plugins/development-convention/skills/fix-root-cause/references/root-cause-rule.md"
+      ],
+      "stage": "after-required-reference-read",
+      "messages": [
+        {
+          "role": "user",
+          "content": "対象は会議室予約のrepository（絶対path /tmp/fixture-repo）。原因の特定と修正候補の提示までを依頼し、コードの変更はしません。references/root-cause-rule.mdは添付resourcesの内容を読取済みです。この場面ではツールを実行できないので、次に読むfileや実行するcommandは示すだけにしてください。\n\n症状の報告: 取り消し済みの予約 R-1 に対して外部I/Fから「確定」を送ると、確定済みになってしまう。期待は「取消済みの予約は確定できない」という拒否。\n\n正本: domain-rule資料 /tmp/fixture-repo/docs/domain-rule.md（2026-09-01観測）に「取消済みの予約に対する確定は『取消済みの予約は確定できない』として拒む」がある。domain-model資料は予約集約の状態を仮押さえ・確定済み・取消済みの3つとし、確定の操作を仮押さえだけに置く。\n\n既に分かっている事実: 確定の操作を呼ぶ経路は、(a) 外部I/Fの確定RPC → 確定ユースケース → 集約の確定操作、(b) 期限監視の定期処理 → 同じ確定ユースケース → 同じ集約の確定操作、の2本。集約の実装は状態を1つのstructで持ち、確定操作が状態を確かめずに確定済みへ書き換えている。既存テストは仮押さえからの確定だけを確かめている。\n\n報告者の提案: 外部I/Fの確定RPCの入口に「取消済みなら拒否」の分岐を足す。\n\n判断と修正候補を示してください。"
+        }
+      ],
+      "criteria": [
+        {
+          "id": "expected-from-doc",
+          "meaning": "期待状態をdomain-rule資料の行（絶対path・観測時点・業務操作・期待状態）へ追跡し、不具合として確定する"
+        },
+        {
+          "id": "red-before-fix",
+          "meaning": "修正の前に、取消済みからの確定が拒まれることを確かめる再現テストを、症状が現れる最も内側の層（集約のテスト）に置いて赤にする手順を示す"
+        },
+        {
+          "id": "innermost-common-point",
+          "meaning": "報告者の提案（外部I/Fの入口だけの分岐）を採らず、2経路が経由する集約の確定操作（取消済みの状態で確定できない形）を修正箇所に選び、期限監視の経路にも同じ症状があることを理由に挙げる"
+        },
+        {
+          "id": "no-code-change",
+          "meaning": "原因の特定と修正候補の提示までの依頼に対してコードを変えず、実行する検査と未確認の経路を示す"
+        }
+      ]
     }
   ]
 }
