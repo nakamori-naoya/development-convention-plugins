@@ -13,7 +13,9 @@ __pycache__/
 !/decisions/
 !/plugins/
 !/scripts/
+!/tests/
 !/AGENTS.md
+!/CLAUDE.md
 !/LICENSE
 !/README.md
 !/SECURITY.md
