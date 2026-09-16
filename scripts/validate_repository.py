@@ -144,7 +144,7 @@ def validate_repository(repository: Path) -> None:
     if not repository.is_absolute() or repository.is_symlink() or not repository.is_dir():
         fail(f"repositoryは実在する絶対directoryでなければなりません: {repository}")
     codex, claude = catalog_entry(repository, "codex"), catalog_entry(repository, "claude")
-    if codex != claude or codex != ("development-convention", "0.1.0", "./plugins/development-convention"):
+    if codex != claude or codex != ("development-convention", "1.0.0", "./plugins/development-convention"):
         fail("runtime間の公開package identityが一致しません")
     package = repository / "plugins/development-convention"
     manifests = [load_json(package / f".{runtime}-plugin/plugin.json") for runtime in ("codex", "claude")]
