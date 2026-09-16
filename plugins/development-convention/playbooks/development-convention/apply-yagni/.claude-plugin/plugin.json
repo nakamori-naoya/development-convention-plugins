@@ -1,8 +1,0 @@
-{
-  "name": "apply-yagni",
-  "version": "0.1.0",
-  "description": "資料が要求しない公開シンボルを作らず残さない公開入口",
-  "skills": "./",
-  "metadata": {"harness": {"contractVersion": 1}}
-}
-

@@ -1,8 +1,0 @@
-{
-  "name": "develop-inside-out",
-  "version": "0.1.0",
-  "description": "BDD資料をゲートにして内側から外へ機能を実装する",
-  "skills": "./",
-  "metadata": {"harness": {"contractVersion": 1}}
-}
-
