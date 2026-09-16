@@ -1,9 +1,11 @@
 ---
-name: development-convention-internal-apply-yagni
+name: apply-yagni
 description: 現在のdomain-rule、domain-model、rdb-logical-data-modeling、user-journey-bddと、それらを写したテストだけを根拠に、対象コードの公開シンボルを保持・拒否へ分類し、要求されない公開面を作らず残さない。これが本当に必要か、資料にないコードが混ざっていないかを判断するときに使う。
 ---
 
 # apply-yagni
+
+[工程順序の正本](playbook.yml)を最初に読み、同じagentが\`steps\`を宣言順に実行する。YAMLは工程順序を決め、各工程の判断内容と根拠はこの本文と参照資料を実読して評価する。失敗時は成功扱いせず停止して、完了工程、根拠、未決を残し、再開時は最初の未完了工程から続ける。
 
 対象コードの公開シンボルを、現在の正本資料とその振る舞いを写したテストが呼ぶかで判定し、根拠のない公開シンボルを対象範囲から除く。
 
@@ -53,7 +55,9 @@ description: 現在のdomain-rule、domain-model、rdb-logical-data-modeling、u
 
 直接呼ぶ、または現在の振る舞いを成立させる通常の公開契約として一意に必要なら`keep`とする。どちらからも呼ばれない、要否が不明、将来利用、汎用化、便利さ、一般的な推奨だけが理由なら`reject`とする。shim、互換分岐、deprecated温存、旧名委譲は、資料とテストに呼び出しがあっても常に`reject`とする。
 
-候補ごとに`public`、`existing`、`canonical_doc_calls`、`derived_test_calls`を必ずbooleanで記録し、`future_only`、`compatibility`、`auxiliary_test_case_id_generated`、`randomized_input_values`、`random_new_behavior`も該当するときbooleanで記録する。配布directory内の`scripts/evaluate.py`を絶対パスで解決し、`python3 <evaluate.pyの絶対path> --input <入力JSONの絶対path>`を実行する。stdoutの分類と行動をその候補の決定とし、`stop`なら以降を変更せず不足する追跡を返す。`remove`は既存シンボルを削除対象、`do_not_create`は新しいシンボルを作らない判断とする。必須値の省略・`null`は停止、不正な型は入力拒否として扱い、暗黙の偽へ丸めない。
+候補ごとに、公開面か、既存か、正本資料のどの箇所が呼ぶか、その振る舞いを写したどのテストが呼ぶかを、実資料・実コード・実テストの箇所で記録する。将来利用、互換形、補助テストのcase ID、ランダム入力、新しい業務分岐は根拠と混同しない。booleanを並べた入力から分類を決めるスクリプトやstdoutを決定の正本にせず、この証拠を同じ担当が読んで`keep`または`reject`を判断する。
+
+追跡が不足する場合は以降を変更せず、欠けた正本またはテストと影響する候補を返す。既存の`reject`は削除対象、新規の`reject`は作らない判断とする。候補が公開面かどうか自体を確認できない場合も暗黙の偽へ丸めない。
 
 成功判定: すべての候補が`keep`または`reject`の一つになり、`keep`には資料とテスト、`reject`には根拠不在を示せる。
 
