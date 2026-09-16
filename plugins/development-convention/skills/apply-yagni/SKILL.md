@@ -18,6 +18,9 @@ description: 現在のdomain-rule、domain-model、rdb-logical-data-modeling、u
 - 正本の振る舞いを写したテストと、資料からテストへの追跡情報。
 - 候補となる公開シンボル。公開関数、公開型、公開メソッド、外部I/F、設定項目、イベント契約を含む。
 - 判定だけか、不要な公開シンボルの除去まで依頼されているか。
+- `references`: 追加で従う資料の絶対path配列。任意。手順の最初に読み、以降の判断でこの規約と併せて従う。
+
+プロジェクト固有の規約（置き場、命名、追加で従う資料）は、対象repositoryのAGENTS.md / CLAUDE.mdと`references`で渡される。この入口は既定値を持たず、指示文へ展開もしない。
 
 ## 開始条件
 
@@ -26,6 +29,8 @@ description: 現在のdomain-rule、domain-model、rdb-logical-data-modeling、u
 ## 作業手順
 
 ### 1. 現在の正本を固定する
+
+`references` があれば、この工程の最初に読む。
 
 適用条件: 対象に関係する資料を列挙できる。
 
