@@ -1,0 +1,168 @@
+{
+  "layer": [
+    {
+      "name": "典型_ドメイン責務",
+      "input": {"requested_role": "domain"},
+      "expected": {"logical_role": "domain", "action": "proceed"}
+    },
+    {
+      "name": "典型_集約リポジトリ責務",
+      "input": {"requested_role": "aggregate_repository"},
+      "expected": {"logical_role": "aggregate_repository", "action": "proceed"}
+    },
+    {
+      "name": "典型_外部境界責務",
+      "input": {"requested_role": "external_boundary"},
+      "expected": {"logical_role": "external_boundary", "action": "proceed"}
+    },
+    {
+      "name": "典型_Query実装責務",
+      "input": {"requested_role": "query_implementation", "operation": "list", "mode": "query", "restores_aggregate": false},
+      "expected": {"logical_role": "query_implementation", "action": "proceed"}
+    },
+    {
+      "name": "反例_一覧を集約リポジトリへ置く要求",
+      "input": {"requested_role": "aggregate_repository", "operation": "list", "mode": "query", "restores_aggregate": true},
+      "expected": {"action": "stop", "reason": "query_role_conflict"}
+    },
+    {
+      "name": "反例_件数をドメインへ置く要求",
+      "input": {"requested_role": "domain", "operation": "count", "mode": "query", "restores_aggregate": false},
+      "expected": {"action": "stop", "reason": "query_role_conflict"}
+    },
+    {
+      "name": "反例_検索で集約を復元するQuery実装",
+      "input": {"requested_role": "query_implementation", "operation": "search", "mode": "query", "restores_aggregate": true},
+      "expected": {"action": "stop", "reason": "query_role_conflict"}
+    },
+    {
+      "name": "反例_存在確認を集約リポジトリへ置く要求",
+      "input": {"requested_role": "aggregate_repository", "operation": "exists", "restores_aggregate": false},
+      "expected": {"action": "stop", "reason": "query_role_conflict"}
+    },
+    {
+      "name": "典型_集約Command調整",
+      "input": {"requested_role": "aggregate_command_coordination", "operation": "command", "mode": "command", "reads_other_aggregate": true, "writes_aggregates": 1},
+      "expected": {"logical_role": "aggregate_command_coordination", "action": "proceed"}
+    },
+    {
+      "name": "典型_複数集約調整",
+      "input": {"requested_role": "cross_aggregate_command_coordination", "operation": "command", "mode": "command", "writes_aggregates": 2, "expected_time_gap": false},
+      "expected": {"logical_role": "cross_aggregate_command_coordination", "consistency": "single_transaction", "action": "proceed"}
+    },
+    {
+      "name": "境界_時間差が明記された変更",
+      "input": {"requested_role": "cross_aggregate_command_coordination", "operation": "command", "mode": "command", "writes_aggregates": 2, "expected_time_gap": true},
+      "expected": {"logical_role": "cross_aggregate_command_coordination", "consistency": "outbox", "action": "proceed"}
+    },
+    {
+      "name": "負例_DBで集合的制約を宣言できない",
+      "input": {"requested_role": "aggregate_command_coordination", "operation": "command", "mode": "command", "writes_aggregates": 1, "collective_constraint": true, "db_declarative_constraint": false},
+      "expected": {"action": "stop", "reason": "db_constraint_unavailable"}
+    },
+    {
+      "name": "境界_DBの集合的制約可否が不明",
+      "input": {"requested_role": "aggregate_command_coordination", "operation": "command", "mode": "command", "writes_aggregates": 1, "collective_constraint": true},
+      "expected": {"logical_role": "aggregate_command_coordination", "action": "proceed", "hypothesis": {"db_declarative_constraint": true}, "open_questions": ["db_constraint_unknown"]}
+    },
+    {
+      "name": "負例_Commandの書き込み集約数が不明",
+      "input": {"requested_role": "aggregate_command_coordination", "operation": "command", "mode": "command"},
+      "expected": {"logical_role": "aggregate_command_coordination", "action": "proceed", "hypothesis": {"writes_aggregates": 1}, "open_questions": ["aggregate_write_count_unknown"]}
+    },
+    {
+      "name": "境界_複数集約の時間差が不明",
+      "input": {"requested_role": "cross_aggregate_command_coordination", "operation": "command", "mode": "command", "writes_aggregates": 2},
+      "expected": {"logical_role": "cross_aggregate_command_coordination", "consistency": "single_transaction", "action": "proceed", "hypothesis": {"expected_time_gap": false}, "open_questions": ["consistency_timing_unknown"]}
+    },
+    {
+      "name": "負例_責務が不明",
+      "input": {"mode": "command", "writes_aggregates": 1},
+      "expected": {"logical_role": "command_usecase", "action": "proceed", "hypothesis": {"requested_role": "command_usecase"}, "open_questions": ["responsibility_unknown"]}
+    },
+    {
+      "name": "負例_責務が閉じた集合にない",
+      "input": {"requested_role": "service"},
+      "expected": {"action": "stop", "reason": "responsibility_invalid"}
+    }
+  ],
+  "delivery": [
+    {
+      "name": "典型_Command場面",
+      "input": {"journey_scene": true, "mode": "command", "persistence": true, "rdb_explicitly_excludes": false, "lower_gate_green": true},
+      "expected": {"action": "proceed", "gates": ["acceptance_red", "domain", "repository_real_db", "usecase", "handler_acceptance_green"]}
+    },
+    {
+      "name": "似て非なる_Queryだけの場面",
+      "input": {"journey_scene": true, "mode": "query", "persistence": false, "lower_gate_green": true},
+      "expected": {"action": "proceed", "gates": ["acceptance_red", "query_real_db", "usecase", "handler_acceptance_green"]}
+    },
+    {
+      "name": "反例_Journey場面なし",
+      "input": {"journey_scene": false, "mode": "command", "persistence": true, "rdb_explicitly_excludes": false, "lower_gate_green": true},
+      "expected": {"action": "stop", "reason": "journey_scene_missing", "gates": []}
+    },
+    {
+      "name": "負例_下層ゲートが赤",
+      "input": {"journey_scene": true, "mode": "command", "persistence": true, "rdb_explicitly_excludes": false, "lower_gate_green": false},
+      "expected": {"action": "stop", "reason": "lower_gate_red", "gates": ["acceptance_red"]}
+    },
+    {
+      "name": "境界_永続化資料で対象外",
+      "input": {"journey_scene": true, "mode": "command", "persistence": true, "rdb_explicitly_excludes": true, "lower_gate_green": true},
+      "expected": {"action": "stop", "reason": "persistence_input_missing", "gates": []}
+    },
+    {
+      "name": "境界_永続化資料の対象内外が不明",
+      "input": {"journey_scene": true, "mode": "command", "persistence": true, "lower_gate_green": true},
+      "expected": {"action": "proceed", "hypothesis": {"rdb_explicitly_excludes": false}, "open_questions": ["persistence_scope_unknown"], "gates": ["acceptance_red", "domain", "repository_real_db", "usecase", "handler_acceptance_green"]}
+    }
+  ],
+  "yagni": [
+    {
+      "name": "典型_資料とテストが呼ぶ",
+      "input": {"public": true, "existing": true, "canonical_doc_calls": true, "derived_test_calls": true},
+      "expected": {"classification": "keep", "action": "proceed"}
+    },
+    {
+      "name": "似て非なる_private変換",
+      "input": {"public": false, "existing": true, "canonical_doc_calls": false, "derived_test_calls": false},
+      "expected": {"classification": "out_of_scope", "action": "proceed"}
+    },
+    {
+      "name": "反例_将来用公開面",
+      "input": {"public": true, "existing": false, "canonical_doc_calls": false, "derived_test_calls": false, "future_only": true},
+      "expected": {"classification": "reject", "action": "do_not_create"}
+    },
+    {
+      "name": "境界_資料だけにありテストがない",
+      "input": {"public": true, "existing": false, "canonical_doc_calls": true, "derived_test_calls": false},
+      "expected": {"classification": "reject", "action": "do_not_create", "open_questions": ["test_trace_missing"]}
+    },
+    {
+      "name": "負例_根拠のない互換shim",
+      "input": {"public": true, "canonical_doc_calls": true, "derived_test_calls": true, "compatibility": true, "existing": true},
+      "expected": {"classification": "reject", "action": "remove"}
+    },
+    {
+      "name": "境界_ランダム入力だけが新分岐を呼ぶ",
+      "input": {"public": true, "existing": false, "canonical_doc_calls": false, "derived_test_calls": true, "randomized_input_values": true, "random_new_behavior": true},
+      "expected": {"classification": "reject", "action": "do_not_create"}
+    },
+    {
+      "name": "境界_技術テストの生成ケースID",
+      "input": {"public": false, "existing": true, "canonical_doc_calls": false, "derived_test_calls": false, "auxiliary_test_case_id_generated": true},
+      "expected": {"classification": "out_of_scope", "action": "proceed"}
+    },
+    {
+      "name": "境界_ランダム入力で既存挙動を検証",
+      "input": {"public": true, "existing": true, "canonical_doc_calls": true, "derived_test_calls": true, "randomized_input_values": true},
+      "expected": {"classification": "keep", "action": "proceed"}
+    },
+    {
+      "name": "負例_必須根拠が不明",
+      "input": {"public": true, "existing": null, "canonical_doc_calls": true, "derived_test_calls": true},
+      "expected": {"classification": "keep", "action": "proceed", "hypothesis": {"existing": true}, "open_questions": ["required_evidence_unknown"], "unknown": ["existing"]}
+    }
+  ]
+}
