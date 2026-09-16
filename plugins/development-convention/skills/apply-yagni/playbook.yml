@@ -1,7 +1,7 @@
 version: 2
 name: apply-yagni
 description: 現在の根拠から公開面を同じagentが宣言順に評価して縮小する。
-inputs: [request, target_repository, target_scope, canonical_artifacts, derived_tests, public_symbols]
+inputs: [request, references, target_repository, target_scope, canonical_artifacts, derived_tests, public_symbols]
 instructions:
   execution:
     directive: 同じagentがstepsを上から順に実行し、失敗した工程を成功扱いせず停止する

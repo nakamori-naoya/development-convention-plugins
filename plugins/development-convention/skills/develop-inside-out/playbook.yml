@@ -1,7 +1,7 @@
 version: 2
 name: develop-inside-out
 description: 一場面を同じagentが宣言順に内側から外側へ実装する。
-inputs: [request, target_repository, user_journey_bdd, domain_rule, domain_model, rdb_logical_data_modeling, existing_code]
+inputs: [request, references, target_repository, user_journey_bdd, domain_rule, domain_model, rdb_logical_data_modeling, existing_code]
 instructions:
   execution:
     directive: 同じagentがstepsを上から順に実行し、失敗した工程を成功扱いせず停止する
