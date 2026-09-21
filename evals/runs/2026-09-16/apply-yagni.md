@@ -11,15 +11,15 @@ cd development-convention-plugins && python3 ../product-planning-plugins/shared/
   --model claude-opus-5 --judge-model claude-sonnet-5 --settings '{"effort":"high"}' --output evals/runs/2026-09-16/apply-yagni.json
 ```
 
-このrepositoryは評価runtimeの複製を持たないので、正本を直接使った。
+このrepositoryは評価runtimeの複製を持たないので、正式な定義を直接使った。
 
 ## agentの所見（「」は応答の逐語。『』はSKILL等の出典付き引用）
 
 | criterion | 所見 | 根拠 |
 |---|---|---|
-| reject-unsourced | 満たす。RescheduleとExportCSVをrejectにし、保持依頼には従えないと明言。保持したいなら正本へ操作を追加するのが先と示す | 「`Reschedule`を`keep`にしてほしいという依頼には従えません。「あると便利」「将来必要」で保持しない、が手順3の失敗時条項そのものです。」 |
+| reject-unsourced | 満たす。RescheduleとExportCSVをrejectにし、保持依頼には従えないと明言。保持したいなら正式な定義へ操作を追加するのが先と示す | 「`Reschedule`を`keep`にしてほしいという依頼には従えません。「あると便利」「将来必要」で保持しない、が手順3の失敗時条項そのものです。」 |
 | keep-sourced | 満たす。ConfirmとCancelをkeepにし、資料の絶対path・観測時点・業務操作・テストの追跡を根拠に挙げる | 「domain-rule「予約を確定する」（`/tmp/fixture-repo/docs/domain-rule.md`, 2026-09-01）と、それを写した確定テストが呼ぶ」 |
-| judgment-only | 満たす。コードを変えず、未確認5点と正本へ戻す問いを示す | 「判定だけの依頼のため、コードは変更していません。」「正本へ戻す問い: 「日程を変更する」を業務操作として domain-rule / domain-model に追加するか。」 |
+| judgment-only | 満たす。コードを変えず、未確認5点と正式な定義へ戻す問いを示す | 「判定だけの依頼のため、コードは変更していません。」「正式な定義へ戻す問い: 「日程を変更する」を業務操作として domain-rule / domain-model に追加するか。」 |
 
 judge（3件pass）と一致。attempt-2（確定前）と判定は同じ。
 
