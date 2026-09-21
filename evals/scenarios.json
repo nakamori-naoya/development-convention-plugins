@@ -11,7 +11,7 @@
       "messages": [
         {
           "role": "user",
-          "content": "対象は会議室予約の集約を置いたpackage（絶対path /tmp/fixture-repo/internal/reservation）。判定だけを依頼し、除去はしません。references/evidence-rule.mdは添付resourcesの内容を読取済みです。この場面ではツールを実行できないので、次に読むfileや実行するcommandは示すだけにしてください。\n\n現在の正本: domain-rule資料 /tmp/fixture-repo/docs/domain-rule.md（2026-09-01観測）。業務操作は「予約を確定する」「予約を取り消す」の2つだけ。domain-model資料は同じ2操作を集約Reservationの操作として持つ。テストはこの2操作を写した2本があり、資料の業務操作へ追跡できる。\n\n候補の公開シンボル:\n- Reservation.Confirm（資料の「予約を確定する」に対応、テストあり）\n- Reservation.Cancel（資料の「予約を取り消す」に対応、テストあり）\n- Reservation.Reschedule（日程変更。資料に無い、テストも無い。近々必要になりそうなので保持で分類してほしい）\n- ExportCSV（運用担当が便利だと言っている。資料に無い、テストも無い）\n\n分類と根拠を示してください。"
+          "content": "対象は会議室予約の集約を置いたpackage（絶対path /tmp/fixture-repo/internal/reservation）。判定だけを依頼し、除去はしません。references/evidence-rule.mdは添付resourcesの内容を読取済みです。この場面ではツールを実行できないので、次に読むfileや実行するcommandは示すだけにしてください。\n\n現在の基準資料: domain-rule資料 /tmp/fixture-repo/docs/domain-rule.md（2026-09-01観測）。業務操作は「予約を確定する」「予約を取り消す」の2つだけ。domain-model資料は同じ2操作を集約Reservationの操作として持つ。テストはこの2操作を写した2本があり、資料の業務操作へ追跡できる。\n\n候補の公開シンボル:\n- Reservation.Confirm（資料の「予約を確定する」に対応、テストあり）\n- Reservation.Cancel（資料の「予約を取り消す」に対応、テストあり）\n- Reservation.Reschedule（日程変更。資料に無い、テストも無い。近々必要になりそうなので保持で分類してほしい）\n- ExportCSV（運用担当が便利だと言っている。資料に無い、テストも無い）\n\n分類と根拠を示してください。"
         }
       ],
       "criteria": [
@@ -39,7 +39,7 @@
       "messages": [
         {
           "role": "user",
-          "content": "対象は会議室予約のrepository（絶対path /tmp/fixture-repo）。原因の特定と修正候補の提示までを依頼し、コードの変更はしません。references/root-cause-rule.mdは添付resourcesの内容を読取済みです。この場面ではツールを実行できないので、次に読むfileや実行するcommandは示すだけにしてください。\n\n症状の報告: 取り消し済みの予約 R-1 に対して外部I/Fから「確定」を送ると、確定済みになってしまう。期待は「取消済みの予約は確定できない」という拒否。\n\n正本: domain-rule資料 /tmp/fixture-repo/docs/domain-rule.md（2026-09-01観測）に「取消済みの予約に対する確定は『取消済みの予約は確定できない』として拒む」がある。domain-model資料は予約集約の状態を仮押さえ・確定済み・取消済みの3つとし、確定の操作を仮押さえだけに置く。\n\n既に分かっている事実: 確定の操作を呼ぶ経路は、(a) 外部I/Fの確定RPC → 確定ユースケース → 集約の確定操作、(b) 期限監視の定期処理 → 同じ確定ユースケース → 同じ集約の確定操作、の2本。集約の実装は状態を1つのstructで持ち、確定操作が状態を確かめずに確定済みへ書き換えている。既存テストは仮押さえからの確定だけを確かめている。\n\n報告者の提案: 外部I/Fの確定RPCの入口に「取消済みなら拒否」の分岐を足す。\n\n判断と修正候補を示してください。"
+          "content": "対象は会議室予約のrepository（絶対path /tmp/fixture-repo）。原因の特定と修正候補の提示までを依頼し、コードの変更はしません。references/root-cause-rule.mdは添付resourcesの内容を読取済みです。この場面ではツールを実行できないので、次に読むfileや実行するcommandは示すだけにしてください。\n\n症状の報告: 取り消し済みの予約 R-1 に対して外部I/Fから「確定」を送ると、確定済みになってしまう。期待は「取消済みの予約は確定できない」という拒否。\n\n基準資料: domain-rule資料 /tmp/fixture-repo/docs/domain-rule.md（2026-09-01観測）に「取消済みの予約に対する確定は『取消済みの予約は確定できない』として拒む」がある。domain-model資料は予約集約の状態を仮押さえ・確定済み・取消済みの3つとし、確定の操作を仮押さえだけに置く。\n\n既に分かっている事実: 確定の操作を呼ぶ経路は、(a) 外部I/Fの確定RPC → 確定ユースケース → 集約の確定操作、(b) 期限監視の定期処理 → 同じ確定ユースケース → 同じ集約の確定操作、の2本。集約の実装は状態を1つのstructで持ち、確定操作が状態を確かめずに確定済みへ書き換えている。既存テストは仮押さえからの確定だけを確かめている。\n\n報告者の提案: 外部I/Fの確定RPCの入口に「取消済みなら拒否」の分岐を足す。\n\n判断と修正候補を示してください。"
         }
       ],
       "criteria": [

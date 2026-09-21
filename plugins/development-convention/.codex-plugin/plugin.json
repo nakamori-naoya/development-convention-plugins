@@ -14,7 +14,7 @@
   "interface": {
     "displayName": "Development Convention",
     "shortDescription": "言語非依存の層の規約・開発プロセス・YAGNI・根本原因修正",
-    "longDescription": "ドメイン・集約リポジトリ・ユースケース・外部境界の論理責務と依存方向、CommandとQueryの分離、複数集約をまたぐ整合性の置き場、BDD 資料のテストをゲートにして内側から外へ進める ATDD の開発プロセス、資料に無いものを作らない YAGNI、不具合の症状を正本資料と突き合わせて再現テストを赤にし全呼び出し経路が経由する最も内側の一か所を最小の変更で直す根本原因修正を適用します。",
+    "longDescription": "ドメイン・集約リポジトリ・ユースケース・外部境界の論理責務と依存方向、CommandとQueryの分離、複数集約をまたぐ整合性の置き場、BDD 資料のテストをゲートにして内側から外へ進める ATDD の開発プロセス、資料に無いものを作らない YAGNI、不具合の症状を正式な定義資料と突き合わせて再現テストを赤にし全呼び出し経路が経由する最も内側の一か所を最小の変更で直す根本原因修正を適用します。",
     "developerName": "NaoyaNakamori",
     "category": "Developer Tools",
     "capabilities": [
