@@ -99,6 +99,40 @@ def catalog_entry(repository: Path, runtime: str) -> tuple[str, str, str]:
     return values  # type: ignore[return-value]
 
 
+def sibling_path_reference(text: str, sibling: str) -> str | None:
+    """兄弟の入口の中身（directory、参照資料、scripts）を指す path を返す。名前を挙げるだけの参照は返さない。"""
+    name = re.escape(sibling)
+    patterns = (
+        rf"skills/{name}/",
+        rf"\.\./{name}/",
+        rf"(?<![A-Za-z0-9_-]){name}/references/",
+        rf"(?<![A-Za-z0-9_-]){name}/scripts/",
+        rf"(?<![A-Za-z0-9_-]){name}/playbook\.yml",
+        rf"(?<![A-Za-z0-9_-]){name}/SKILL\.md",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if match:
+            return match.group(0)
+    return None
+
+
+# この package の入口と同じ動詞で始まる backtick の名前は、この package の公開入口に実在しなければならない。
+ENTRY_LIKE = re.compile(r"`((?:%s)-[a-z0-9]+(?:-[a-z0-9]+)*)`" % "|".join(sorted({identity.split("-")[0] for identity in IDS})))
+
+
+def check_names(path: Path, text: str, identity: str | None) -> None:
+    for sibling in IDS:
+        if sibling == identity:
+            continue
+        found = sibling_path_reference(text, sibling)
+        if found:
+            fail(f"兄弟の入口の中身をpathで参照しています: {path}: {found}")
+    for name in ENTRY_LIKE.findall(text):
+        if name not in IDS:
+            fail(f"公開入口に実在しない名前をbacktickで挙げています: {path}: {name}")
+
+
 def validate_internal(package: Path) -> None:
     roots = {identifier: package / "skills" / identifier for identifier in IDS}
     for identifier, root in roots.items():
@@ -106,9 +140,7 @@ def validate_internal(package: Path) -> None:
         reference_dir = root / "references"
         assert_regular(entry, "内部入口")
         text = entry.read_text(encoding="utf-8")
-        for sibling in set(IDS) - {identifier}:
-            if re.search(rf"(?<![A-Za-z0-9_-]){re.escape(sibling)}(?![A-Za-z0-9_-])", text):
-                fail(f"内部入口が兄弟identityを参照しています: {entry}: {sibling}")
+        check_names(entry, text, identifier)
         links = []
         for raw in MARKDOWN_LINK.findall(text):
             if raw.startswith("references/"):
@@ -118,10 +150,7 @@ def validate_internal(package: Path) -> None:
         if len(links) != 1 or {root / raw for raw in links} != set(references):
             fail(f"内部入口から参照資料へ一段で到達できません: {entry}")
         for reference in references:
-            body = reference.read_text(encoding="utf-8")
-            for identity in IDS:
-                if re.search(rf"(?<![A-Za-z0-9_-]){re.escape(identity)}(?![A-Za-z0-9_-])", body):
-                    fail(f"参照資料が構成identityを参照しています: {reference}: {identity}")
+            check_names(reference, reference.read_text(encoding="utf-8"), identifier)
         if any(root.glob(".*-plugin/plugin.json")):
             fail(f"直接公開skillに入口別runtime manifestは不要です: {root}")
 
@@ -193,6 +222,14 @@ description: 構造契約だけを満たす境界fixture
         validate_repository(candidate)
         print("Repository positive: passed (判断語や節名を意味品質の代理にしない)")
 
+    with tempfile.TemporaryDirectory(prefix="development-convention-sibling-name-") as value:
+        candidate = Path(value) / "repository"
+        shutil.copytree(repository, candidate, ignore=shutil.ignore_patterns(".git", "__pycache__"))
+        entry = candidate / package / "skills/apply-yagni/SKILL.md"
+        entry.write_text(entry.read_text(encoding="utf-8") + "\n層の置き場の判断は `apply-layer-convention` が持つ。\n", encoding="utf-8")
+        validate_repository(candidate)
+        print("Repository positive: passed (兄弟の公開入口を名前だけで挙げる境界の宣言)")
+
     for label, replacement in (
         ("frontmatter nameのYAML comment", "name: apply-yagni # 公開identity"),
         ("frontmatter nameのquoted scalar", 'name: "apply-yagni"'),
@@ -215,9 +252,17 @@ description: 構造契約だけを満たす境界fixture
     def remove_reference(root: Path) -> None:
         (root / package / "skills/develop-inside-out/references/delivery-gates.md").unlink()
 
-    def add_sibling(root: Path) -> None:
+    def add_sibling_path(root: Path) -> None:
         path = root / package / "skills/apply-yagni/SKILL.md"
-        path.write_text(path.read_text(encoding="utf-8") + "\ndevelop-inside-outを先に実行する。\n", encoding="utf-8")
+        path.write_text(path.read_text(encoding="utf-8") + "\n[手順](../develop-inside-out/references/delivery-gates.md)を読む。\n", encoding="utf-8")
+
+    def add_sibling_reference_path(root: Path) -> None:
+        path = root / package / "skills/apply-yagni/references/evidence-rule.md"
+        path.write_text(path.read_text(encoding="utf-8") + "\n詳しくは skills/fix-root-cause/ を読む。\n", encoding="utf-8")
+
+    def add_unknown_name(root: Path) -> None:
+        path = root / package / "skills/apply-yagni/SKILL.md"
+        path.write_text(path.read_text(encoding="utf-8") + "\n判断の持ち主は `develop-outside-in` である。\n", encoding="utf-8")
 
     def body_only_name(root: Path) -> None:
         path = root / package / "skills/apply-yagni/SKILL.md"
@@ -230,7 +275,9 @@ description: 構造契約だけを満たす境界fixture
 
     expect_rejected(repository, "存在しないskillの公開", "skillと一致", add_missing_skill)
     expect_rejected(repository, "直接参照資料の欠落", "直接参照資料", remove_reference)
-    expect_rejected(repository, "内部入口の兄弟認識", "兄弟identity", add_sibling)
+    expect_rejected(repository, "兄弟の参照資料へのpath", "兄弟の入口の中身", add_sibling_path)
+    expect_rejected(repository, "参照資料から兄弟のdirectoryへのpath", "兄弟の入口の中身", add_sibling_reference_path)
+    expect_rejected(repository, "実在しない入口の名前", "実在しない名前", add_unknown_name)
     expect_rejected(repository, "本文だけの偽name", "frontmatter name", body_only_name)
     expect_rejected(repository, "frontmatter name欠落", "frontmatter name", missing_name)
     print("Repository self-test: passed")
