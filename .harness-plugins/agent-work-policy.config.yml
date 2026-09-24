@@ -16,16 +16,20 @@ gates:
   before_commit: false
   before_push: false
   before_pull_request: false
-  before_merge: false
+  before_merge: true
 verification:
   commands: ["git diff --check", "bash scripts/validate.sh"]
 pull_request:
   draft: false
 merge:
-  method: rebase
+  method: squash
   delete_branch: true
   delete_worktree: false
   readiness:
     min_approvals: 0
-    require_checks_passed: true
     require_no_unresolved_threads: true
+    required_checks:
+      - {name: validate (ubuntu-latest), app: github-actions}
+      - {name: validate (macos-latest), app: github-actions}
+      - {name: gitleaks, app: github-actions}
+      - {name: trufflehog, app: github-actions}
