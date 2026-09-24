@@ -1,7 +1,7 @@
 version: 2
 name: develop-inside-out
-description: 一場面を同じagentが宣言順に内側から外側へ実装する。
-inputs: [request, references, target_repository, user_journey_bdd, domain_rule, domain_model, rdb_logical_data_modeling, existing_code]
+description: 一つの場面を、同じ agent が宣言順に内側から外側へ実装する。
+inputs: [request, references, target_repository, user_journey_bdd, domain_rule, domain_model, rdb_logical_data_modeling, rdb_physical_design, existing_code]
 instructions:
   execution:
     directive: 同じagentがstepsを上から順に実行し、失敗した工程を成功扱いせず停止する
@@ -9,19 +9,19 @@ requires: []
 steps:
   - id: write-acceptance-test
     agent_work: invoking_agent
-    purpose: "一場面を一受け入れテストへ写す"
+    purpose: "一つの場面を一つの受け入れテストへ写す"
   - id: implement-domain
     agent_work: invoking_agent
     purpose: "ドメインを実装する"
   - id: implement-persistence-or-query
     agent_work: invoking_agent
-    purpose: "永続化経路または読み取り経路を実装する"
+    purpose: "永続化または読み取りを実装する"
   - id: implement-usecase
     agent_work: invoking_agent
-    purpose: "ユースケースを実装する"
+    purpose: "usecase を実装する"
   - id: implement-handler-and-pass-acceptance
     agent_work: invoking_agent
-    purpose: "ハンドラーを実装して受け入れを通す"
+    purpose: "入口を実装して受け入れを通す"
   - id: report-trace-and-gates
     agent_work: invoking_agent
-    purpose: "追跡とゲート結果を報告する"
+    purpose: "追跡とゲートの結果を報告する"
