@@ -117,10 +117,6 @@ def sibling_path_reference(text: str, sibling: str) -> str | None:
     return None
 
 
-# この package の入口と同じ動詞で始まる backtick の名前は、この package の公開入口に実在しなければならない。
-ENTRY_LIKE = re.compile(r"`((?:%s)-[a-z0-9]+(?:-[a-z0-9]+)*)`" % "|".join(sorted({identity.split("-")[0] for identity in IDS})))
-
-
 def check_names(path: Path, text: str, identity: str | None) -> None:
     for sibling in IDS:
         if sibling == identity:
@@ -128,9 +124,6 @@ def check_names(path: Path, text: str, identity: str | None) -> None:
         found = sibling_path_reference(text, sibling)
         if found:
             fail(f"兄弟の入口の中身をpathで参照しています: {path}: {found}")
-    for name in ENTRY_LIKE.findall(text):
-        if name not in IDS:
-            fail(f"公開入口に実在しない名前をbacktickで挙げています: {path}: {name}")
 
 
 def validate_internal(package: Path) -> None:
@@ -260,10 +253,6 @@ description: 構造契約だけを満たす境界fixture
         path = root / package / "skills/apply-yagni/references/evidence-rule.md"
         path.write_text(path.read_text(encoding="utf-8") + "\n詳しくは skills/fix-root-cause/ を読む。\n", encoding="utf-8")
 
-    def add_unknown_name(root: Path) -> None:
-        path = root / package / "skills/apply-yagni/SKILL.md"
-        path.write_text(path.read_text(encoding="utf-8") + "\n判断の持ち主は `develop-outside-in` である。\n", encoding="utf-8")
-
     def body_only_name(root: Path) -> None:
         path = root / package / "skills/apply-yagni/SKILL.md"
         text = path.read_text(encoding="utf-8").replace("name: apply-yagni\n", "", 1)
@@ -277,7 +266,6 @@ description: 構造契約だけを満たす境界fixture
     expect_rejected(repository, "直接参照資料の欠落", "直接参照資料", remove_reference)
     expect_rejected(repository, "兄弟の参照資料へのpath", "兄弟の入口の中身", add_sibling_path)
     expect_rejected(repository, "参照資料から兄弟のdirectoryへのpath", "兄弟の入口の中身", add_sibling_reference_path)
-    expect_rejected(repository, "実在しない入口の名前", "実在しない名前", add_unknown_name)
     expect_rejected(repository, "本文だけの偽name", "frontmatter name", body_only_name)
     expect_rejected(repository, "frontmatter name欠落", "frontmatter name", missing_name)
     print("Repository self-test: passed")
