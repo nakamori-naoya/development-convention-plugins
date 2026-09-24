@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "plugin": "development-convention",
+  "version": "4.0.0",
+  "created_at": "2026-09-24T15:44:51.404338+00:00",
+  "notes": "実装パターンの選び方と、資料からずらさず推測で埋めない規律を、この package が持つようにした。apply-layer-convention は、処理ごとに戦術的 DDD か単純なパターンかを二つの問いで選び、command の流れ、入力と時刻と採番の持ち主、物理設計の指定を渡すトランザクション、Outbox、失敗の影響を閉じ込める基準を、言語に依らずに決める。develop-inside-out は、資料が曖昧なら止まって提案する規律を持ち、Go の一単位は go-convention の develop-go-unit が仕上げると示す。四つの skill から「仮説を置いて進む」を外し、例の題材を図書館の貸出にし、判断と理由を見出しと文章で書き直した。兄弟の名前の出現を拒んでいた検査は、兄弟の中身への path の参照を拒む検査に狭めた。",
+  "breaking": "あり。資料が曖昧なときの振る舞いが、仮説を置いて進むから、止まって資料の持ち主へ問うに変わった。apply-layer-convention の工程が、実装パターンの選択と失敗の閉じ込めを含む六つに変わった。",
+  "migration": "marketplace を update し plugin を再 install する。資料が曖昧で止まったときは、返された問いに答えて資料を直してから、もう一度依頼する。",
+  "checks": {
+    "codex": {
+      "status": "manifest-and-contract-tests-passed",
+      "native-client-installation": "not-executed（merge 後に install-plugins.sh で導入）",
+      "evidence": "bash scripts/validate.sh: Validation: passed"
+    },
+    "claude": {
+      "status": "manifest-and-contract-tests-passed",
+      "native-client-installation": "not-executed（merge 後に install-plugins.sh で導入）",
+      "evidence": "bash scripts/validate.sh: Validation: passed"
+    },
+    "root-validation": "root scripts/validate.sh development-convention-plugins: Root validation: passed"
+  },
+  "files": [
+    ".agents/plugins/marketplace.json",
+    "plugins/development-convention/.codex-plugin/plugin.json",
+    ".claude-plugin/marketplace.json",
+    "plugins/development-convention/.claude-plugin/plugin.json"
+  ]
+}
