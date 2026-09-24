@@ -219,9 +219,9 @@ description: 構造契約だけを満たす境界fixture
         candidate = Path(value) / "repository"
         shutil.copytree(repository, candidate, ignore=shutil.ignore_patterns(".git", "__pycache__"))
         entry = candidate / package / "skills/apply-yagni/SKILL.md"
-        entry.write_text(entry.read_text(encoding="utf-8") + "\n層の置き場の判断は `apply-layer-convention` が持つ。\n", encoding="utf-8")
+        entry.write_text(entry.read_text(encoding="utf-8") + "\n層の置き場の判断は `apply-layer-convention` が持つ。Go の単位は go-convention の `develop-go-unit` が仕上げる。\n", encoding="utf-8")
         validate_repository(candidate)
-        print("Repository positive: passed (兄弟の公開入口を名前だけで挙げる境界の宣言)")
+        print("Repository positive: passed (兄弟と外部packageの公開入口をbacktickの名前で挙げる境界の宣言)")
 
     for label, replacement in (
         ("frontmatter nameのYAML comment", "name: apply-yagni # 公開identity"),
