@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path
 
 
-IDS = ("apply-layer-convention", "develop-inside-out", "apply-yagni", "fix-root-cause")
+IDS = ("apply-layer-convention", "develop-inside-out", "apply-yagni", "fix-root-cause", "protect-entry-points")
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 
 
@@ -166,10 +166,11 @@ def validate_repository(repository: Path) -> None:
     if not repository.is_absolute() or repository.is_symlink() or not repository.is_dir():
         fail(f"repositoryは実在する絶対directoryでなければなりません: {repository}")
     codex, claude = catalog_entry(repository, "codex"), catalog_entry(repository, "claude")
-    if codex != claude or codex != ("development-convention", "4.0.0", "./plugins/development-convention"):
-        fail("runtime間の公開package identityが一致しません")
     package = repository / "plugins/development-convention"
     manifests = [load_json(package / f".{runtime}-plugin/plugin.json") for runtime in ("codex", "claude")]
+    # 期待versionはruntime manifestから導き、両marketplaceと一致することを確かめる。
+    if codex != claude or codex != ("development-convention", manifests[0].get("version"), "./plugins/development-convention"):
+        fail("runtime間の公開package identityが一致しません")
     if shared_manifest(manifests[0]) != shared_manifest(manifests[1]):
         fail("runtime間の公開契約が一致しません")
     validate_public(package, manifests[0])
