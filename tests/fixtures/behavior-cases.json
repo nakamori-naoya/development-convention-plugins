@@ -63,22 +63,22 @@
     {
       "name": "境界_DBの集合的制約可否が不明",
       "input": {"requested_role": "aggregate_command_coordination", "operation": "command", "mode": "command", "writes_aggregates": 1, "collective_constraint": true},
-      "expected": {"logical_role": "aggregate_command_coordination", "action": "proceed", "hypothesis": {"db_declarative_constraint": true}, "open_questions": ["db_constraint_unknown"]}
+      "expected": {"action": "stop", "reason": "db_constraint_unknown"}
     },
     {
       "name": "負例_Commandの書き込み集約数が不明",
       "input": {"requested_role": "aggregate_command_coordination", "operation": "command", "mode": "command"},
-      "expected": {"logical_role": "aggregate_command_coordination", "action": "proceed", "hypothesis": {"writes_aggregates": 1}, "open_questions": ["aggregate_write_count_unknown"]}
+      "expected": {"action": "stop", "reason": "aggregate_write_count_unknown"}
     },
     {
       "name": "境界_複数集約の時間差が不明",
       "input": {"requested_role": "cross_aggregate_command_coordination", "operation": "command", "mode": "command", "writes_aggregates": 2},
-      "expected": {"logical_role": "cross_aggregate_command_coordination", "consistency": "single_transaction", "action": "proceed", "hypothesis": {"expected_time_gap": false}, "open_questions": ["consistency_timing_unknown"]}
+      "expected": {"action": "stop", "reason": "consistency_timing_unknown"}
     },
     {
       "name": "負例_責務が不明",
       "input": {"mode": "command", "writes_aggregates": 1},
-      "expected": {"logical_role": "command_usecase", "action": "proceed", "hypothesis": {"requested_role": "command_usecase"}, "open_questions": ["responsibility_unknown"]}
+      "expected": {"action": "stop", "reason": "responsibility_unknown"}
     },
     {
       "name": "負例_責務が閉じた集合にない",
@@ -115,7 +115,7 @@
     {
       "name": "境界_永続化資料の対象内外が不明",
       "input": {"journey_scene": true, "mode": "command", "persistence": true, "lower_gate_green": true},
-      "expected": {"action": "proceed", "hypothesis": {"rdb_explicitly_excludes": false}, "open_questions": ["persistence_scope_unknown"], "gates": ["acceptance_red", "domain", "repository_real_db", "usecase", "handler_acceptance_green"]}
+      "expected": {"action": "stop", "reason": "persistence_scope_unknown", "gates": []}
     }
   ],
   "yagni": [
@@ -162,7 +162,7 @@
     {
       "name": "負例_必須根拠が不明",
       "input": {"public": true, "existing": null, "canonical_doc_calls": true, "derived_test_calls": true},
-      "expected": {"classification": "keep", "action": "proceed", "hypothesis": {"existing": true}, "open_questions": ["required_evidence_unknown"], "unknown": ["existing"]}
+      "expected": {"classification": "keep", "action": "proceed"}
     }
   ]
 }
