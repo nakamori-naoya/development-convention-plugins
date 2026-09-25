@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "plugin": "development-convention",
+  "version": "4.1.0",
+  "created_at": "2026-09-25T06:21:23.444751+00:00",
+  "notes": "TDD の赤の定義を develop-inside-out の「赤とは何か」の一か所に置き、まだ無い型や関数を呼ぶテストのビルド失敗も赤に含めた。fix-root-cause は定義を持たずそこに従う。4.0.0 の後に main へ入った公開入口 protect-entry-points もこの版から配布される。",
+  "breaking": "なし（赤の判定が、ビルドの失敗を赤に含める側へ明確になった。入力と出力は変わらない）",
+  "migration": "marketplace を update し plugin を再 install する。",
+  "checks": {
+    "codex": {
+      "status": "manifest-and-contract-tests-passed",
+      "native-client-installation": "not-executed（merge 後に install-plugins.sh で導入）",
+      "evidence": "bash scripts/validate.sh: exit 0 (Validation: passed)"
+    },
+    "claude": {
+      "status": "manifest-and-contract-tests-passed",
+      "native-client-installation": "not-executed（merge 後に install-plugins.sh で導入）",
+      "evidence": "bash scripts/validate.sh: exit 0 (Validation: passed)"
+    },
+    "root-validation": "root scripts/validate.sh development-convention-plugins: Root validation: passed"
+  },
+  "files": [
+    ".agents/plugins/marketplace.json",
+    "plugins/development-convention/.codex-plugin/plugin.json",
+    ".claude-plugin/marketplace.json",
+    "plugins/development-convention/.claude-plugin/plugin.json"
+  ]
+}
