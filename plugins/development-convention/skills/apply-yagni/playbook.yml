@@ -9,7 +9,7 @@ requires: []
 steps:
   - id: fix-current-sources
     agent_work: invoking_agent
-    purpose: "現在の正式な定義を固定する"
+    purpose: "現在の業務の資料を固定する"
   - id: verify-source-test-trace
     agent_work: invoking_agent
     purpose: "資料とテストの対応を検査する"

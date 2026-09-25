@@ -9,7 +9,7 @@ requires: []
 steps:
   - id: fix-symptom-and-expected
     agent_work: invoking_agent
-    purpose: "症状と期待状態を正式な定義へ固定する"
+    purpose: "症状と期待状態を業務の資料へ固定する"
   - id: reproduce-red
     agent_work: invoking_agent
     purpose: "症状を再現テストで赤にする"
