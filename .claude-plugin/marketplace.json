@@ -9,7 +9,7 @@
       "name": "development-convention",
       "source": "./plugins/development-convention",
       "description": "層の規約・内側から外へ進める開発プロセス・YAGNI・根本原因修正の 4 つの独立した入口を提供する",
-      "version": "4.2.0"
+      "version": "5.0.0"
     }
   ]
 }
