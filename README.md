@@ -10,7 +10,7 @@
 - `fix-root-cause`: 不具合の症状を業務の資料と突き合わせて再現テストを赤にし、全呼び出し経路が経由する最も内側の一か所を最小の変更で直す。
 - `protect-entry-points`: 外部から呼べる入口ごとに、認証、認可、利用上限、偽装要求への対策、呼び出す高価な下流の資源を宣言した資料を作る。
 
-marketplaceが公開・インストールするのは`development-convention` package一件だけである。package manifestは五つの自己完結skillを`skills/`から直接公開し、存在確認だけのprepare、外側のrouting playbook、入口別manifestを挟まない。各skill直下の`playbook.yml` v2が一つの仕事の工程順序を保持し、公開`SKILL.md`から同じagentが宣言順に辿る。
+marketplaceが公開・インストールするのは`development-convention` package一件だけである。package manifestは五つの自己完結skillを`skills/`から直接公開する。各skillの判断と手順は、その`SKILL.md`（と参照資料）にある。
 
 ## 責務の境界
 
@@ -31,4 +31,4 @@ PYTHONDONTWRITEBYTECODE=1 bash /Users/naoya-nakamoriq/Documents/Github/harness-p
 PYTHONDONTWRITEBYTECODE=1 bash /Users/naoya-nakamoriq/Documents/Github/harness-pluginsv2/scripts/validate.sh /Users/naoya-nakamoriq/Documents/Github/harness-pluginsv2/development-convention-plugins
 ```
 
-`scripts/validate.sh`は先に兄弟checkout `../harness-tools/tools/validate-plugin-repository.py`（保守toolの唯一の参照元。無ければ止まる）でroot契約を検査し、CIは`.github/workflows/validate.yml`で`harness-tools`を兄弟checkoutして`harness-tools/ci/validate.sh`で同じcommandを実行する。repository固有検証は、manifest、直接公開境界、各skill文書の自己完結性（兄弟の中身へのpathの参照が無いこと）に加え、隣接`playbook.yml`のidentity、宣言順、`agent_work: invoking_agent`、実値を使う場合のneeds/provides接続を検査する。文章や判断の意味品質は対象を実読して評価する。
+`scripts/validate.sh`は先に兄弟checkout `../harness-tools/tools/validate-plugin-repository.py`（保守toolの唯一の参照元。無ければ止まる）でroot契約を検査し、CIは`.github/workflows/validate.yml`で`harness-tools`を兄弟checkoutして`harness-tools/ci/validate.sh`で同じcommandを実行する。repository固有検証は、manifest、直接公開境界、各skill文書の自己完結性（兄弟の中身へのpathの参照が無いこと）を検査する。文章や判断の意味品質は対象を実読して評価する。
