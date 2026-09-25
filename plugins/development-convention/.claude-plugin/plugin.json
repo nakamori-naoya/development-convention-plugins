@@ -33,8 +33,7 @@
   },
   "metadata": {
     "harness": {
-      "marketplace": "development-convention",
-      "contractVersion": 1
+      "marketplace": "development-convention"
     }
   }
 }
