@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PACKAGE = ROOT / "plugins/development-convention"
-IDS = ("apply-layer-convention", "develop-inside-out", "apply-yagni", "fix-root-cause", "protect-entry-points")
+IDS = ("apply-layer-convention", "develop-inside-out", "apply-yagni", "fix-root-cause", "protect-entry-points", "write-readable-code")
 
 
 def run(*args: str, ok: bool = True) -> subprocess.CompletedProcess[str]:

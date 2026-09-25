@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path
 
 
-IDS = ("apply-layer-convention", "develop-inside-out", "apply-yagni", "fix-root-cause", "protect-entry-points")
+IDS = ("apply-layer-convention", "develop-inside-out", "apply-yagni", "fix-root-cause", "protect-entry-points", "write-readable-code")
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 
 

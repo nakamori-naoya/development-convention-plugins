@@ -1,7 +1,7 @@
 {
   "name": "development-convention",
   "version": "4.1.0",
-  "description": "言語非依存の開発規約（論理責務・CommandとQuery・複数集約の整合性）、内側から外へ進める開発プロセス（BDD ゲート・ATDD）、YAGNI、症状から根本原因の一か所を直す不具合修正を配布する",
+  "description": "言語非依存の開発規約（論理責務・CommandとQuery・複数集約の整合性）、内側から外へ進める開発プロセス（BDD ゲート・ATDD）、YAGNI、名前とコメントとテストの規律、症状から根本原因の一か所を直す不具合修正を配布する",
   "author": {
     "name": "NaoyaNakamori"
   },
@@ -10,12 +10,13 @@
     "./skills/develop-inside-out",
     "./skills/apply-yagni",
     "./skills/fix-root-cause",
-    "./skills/protect-entry-points"
+    "./skills/protect-entry-points",
+    "./skills/write-readable-code"
   ],
   "interface": {
     "displayName": "Development Convention",
-    "shortDescription": "言語非依存の層の規約・開発プロセス・YAGNI・根本原因修正",
-    "longDescription": "ドメイン・集約リポジトリ・ユースケース・外部境界の論理責務と依存方向、CommandとQueryの分離、複数集約をまたぐ整合性の置き場、BDD 資料のテストをゲートにして内側から外へ進める ATDD の開発プロセス、資料に無いものを作らない YAGNI、不具合の症状を業務の資料と突き合わせて再現テストを赤にし全呼び出し経路が経由する最も内側の一か所を最小の変更で直す根本原因修正を適用します。",
+    "shortDescription": "言語非依存の層の規約・開発プロセス・YAGNI・名前とコメント・根本原因修正",
+    "longDescription": "ドメイン・集約リポジトリ・ユースケース・外部境界の論理責務と依存方向、CommandとQueryの分離、複数集約をまたぐ整合性の置き場、BDD 資料のテストをゲートにして内側から外へ進める ATDD の開発プロセス、資料に無いものを作らない YAGNI、名前を業務の言葉で付けコメントを自分の責務だけで書きテストのために実装を曲げない規律、不具合の症状を業務の資料と突き合わせて再現テストを赤にし全呼び出し経路が経由する最も内側の一か所を最小の変更で直す根本原因修正を適用します。",
     "developerName": "NaoyaNakamori",
     "category": "Developer Tools",
     "capabilities": [
@@ -26,7 +27,8 @@
       "この資料一式から内側の層から順に実装して。",
       "このコードに資料に無いものが混ざっていないか見て。",
       "このバグを、呼び出し元を全部辿って根本の一か所で直して。",
-      "外部から呼べる入口ごとに、認証・認可・利用上限・CSRFの方針を宣言して。"
+      "外部から呼べる入口ごとに、認証・認可・利用上限・CSRFの方針を宣言して。",
+      "この型の名前とコメントを業務の言葉に直して。"
     ]
   },
   "metadata": {
