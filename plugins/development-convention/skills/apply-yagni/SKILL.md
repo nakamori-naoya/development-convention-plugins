@@ -1,11 +1,11 @@
 ---
 name: apply-yagni
-description: 現在の domain-rule、domain-model、rdb-logical-data-modeling、user-journey-bdd と、それらを写したテストだけを根拠に、対象コードの公開シンボルを keep か reject に分け、要求されない公開面を作らず残さない。「これが本当に必要か」「資料にないコードが混ざっていないか」を判断するときに使う。
+description: 現在の business-knowledge、domain-model、command-data-model、query-data-model、user-journey-bdd と、それらを写したテストだけを根拠に、対象コードの公開シンボルを keep か reject に分け、要求されない公開面を作らず残さない。「これが本当に必要か」「資料にないコードが混ざっていないか」を判断するときに使う。
 ---
 
 # apply-yagni
 
-基準は一つだけである。**現在の業務の資料と、その振る舞いを写したテストが、この公開シンボルを呼ぶか。** 呼ぶなら keep、呼ばないなら reject にする。業務の資料は、対象に関係する現在の domain-rule、domain-model、rdb-logical-data-modeling、user-journey-bdd である。公開シンボルは外から名前で使える契約（公開の関数、型、メソッド、外部 I/F、設定項目、イベントの契約）で、非公開の変換や接続は対象外である。
+基準は一つだけである。**現在の業務の資料と、その振る舞いを写したテストが、この公開シンボルを呼ぶか。** 呼ぶなら keep、呼ばないなら reject にする。業務の資料は、対象に関係する現在の business-knowledge、domain-model、command-data-model、query-data-model、user-journey-bdd である。公開シンボルは外から名前で使える契約（公開の関数、型、メソッド、外部 I/F、設定項目、イベントの契約）で、非公開の変換や接続は対象外である。
 
 将来使う、汎用にしたい、便利、一般的な推奨は根拠にならない。テストのためだけに足した公開面も reject で、テストが根拠になるのは業務の資料の振る舞いを写しているときだけである（テストのために実装を曲げない規律そのものは `write-readable-code` が持つ）。資料の外の技術的なテストが持つ生成したケースの ID やランダムな入力も、新しい公開面の根拠にしない。shim、互換の分岐、deprecated の温存、旧い名前への委譲、新旧の二重書き込みは、資料やテストが呼んでいても常に reject にし、資料とテストを通常の形へ更新する必要を未決として返す。互換を残すと同じことをする経路が二つになるからである。
 
