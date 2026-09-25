@@ -107,7 +107,6 @@ def sibling_path_reference(text: str, sibling: str) -> str | None:
         rf"\.\./{name}/",
         rf"(?<![A-Za-z0-9_-]){name}/references/",
         rf"(?<![A-Za-z0-9_-]){name}/scripts/",
-        rf"(?<![A-Za-z0-9_-]){name}/playbook\.yml",
         rf"(?<![A-Za-z0-9_-]){name}/SKILL\.md",
     )
     for pattern in patterns:
@@ -134,13 +133,13 @@ def validate_internal(package: Path) -> None:
         assert_regular(entry, "内部入口")
         text = entry.read_text(encoding="utf-8")
         check_names(entry, text, identifier)
-        links = []
+        links = set()
         for raw in MARKDOWN_LINK.findall(text):
             if raw.startswith("references/"):
-                links.append(raw)
+                links.add(root / raw)
                 assert_regular(root / raw, "直接参照資料")
-        references = sorted(reference_dir.glob("*.md"))
-        if len(links) != 1 or {root / raw for raw in links} != set(references):
+        references = set(reference_dir.glob("*.md"))
+        if links != references:
             fail(f"内部入口から参照資料へ一段で到達できません: {entry}")
         for reference in references:
             check_names(reference, reference.read_text(encoding="utf-8"), identifier)
@@ -207,8 +206,6 @@ description: 構造契約だけを満たす境界fixture
 ---
 # 境界fixture
 
-[根拠](references/evidence-rule.md)
-
 証拠を実読して判断する。
 """,
             encoding="utf-8",
@@ -220,7 +217,7 @@ description: 構造契約だけを満たす境界fixture
         candidate = Path(value) / "repository"
         shutil.copytree(repository, candidate, ignore=shutil.ignore_patterns(".git", "__pycache__"))
         entry = candidate / package / "skills/apply-yagni/SKILL.md"
-        entry.write_text(entry.read_text(encoding="utf-8") + "\n層の置き場の判断は `apply-layer-convention` が持つ。Go の単位は go-convention の `develop-go-unit` が仕上げる。\n", encoding="utf-8")
+        entry.write_text(entry.read_text(encoding="utf-8") + "\n層の置き場の判断は `apply-layer-convention` が持つ。Go の一つの層は go-convention の `develop-usecase` などが仕上げる。\n", encoding="utf-8")
         validate_repository(candidate)
         print("Repository positive: passed (兄弟と外部packageの公開入口をbacktickの名前で挙げる境界の宣言)")
 
@@ -244,14 +241,14 @@ description: 構造契約だけを満たす境界fixture
             path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     def remove_reference(root: Path) -> None:
-        (root / package / "skills/develop-inside-out/references/delivery-gates.md").unlink()
+        (root / package / "skills/protect-entry-points/references/token-verification.md").unlink()
 
     def add_sibling_path(root: Path) -> None:
         path = root / package / "skills/apply-yagni/SKILL.md"
-        path.write_text(path.read_text(encoding="utf-8") + "\n[手順](../develop-inside-out/references/delivery-gates.md)を読む。\n", encoding="utf-8")
+        path.write_text(path.read_text(encoding="utf-8") + "\n[手順](../protect-entry-points/references/token-verification.md)を読む。\n", encoding="utf-8")
 
     def add_sibling_reference_path(root: Path) -> None:
-        path = root / package / "skills/apply-yagni/references/evidence-rule.md"
+        path = root / package / "skills/protect-entry-points/references/token-verification.md"
         path.write_text(path.read_text(encoding="utf-8") + "\n詳しくは skills/fix-root-cause/ を読む。\n", encoding="utf-8")
 
     def body_only_name(root: Path) -> None:
