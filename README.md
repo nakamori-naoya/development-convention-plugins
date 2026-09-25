@@ -1,6 +1,6 @@
 # development-convention-plugins
 
-言語に依存しない開発規約を、独立した五つの公開入口として配布するrepositoryである。
+言語に依存しない開発規約を、独立した六つの公開入口として配布するrepositoryである。
 
 ## 公開入口
 
@@ -9,8 +9,9 @@
 - `apply-yagni`: 現在の業務の資料とそこから導いたテストが要求しない公開シンボルを作らず、残さない。
 - `fix-root-cause`: 不具合の症状を業務の資料と突き合わせて再現テストを赤にし、全呼び出し経路が経由する最も内側の一か所を最小の変更で直す。
 - `protect-entry-points`: 外部から呼べる入口ごとに、認証、認可、利用上限、偽装要求への対策、呼び出す高価な下流の資源を宣言した資料を作る。
+- `write-readable-code`: 名前を業務の言葉で付け、コメントを自分の責務だけで書き、テストのために実装を曲げない。
 
-marketplaceが公開・インストールするのは`development-convention` package一件だけである。package manifestは五つの自己完結skillを`skills/`から直接公開する。各skillの判断と手順は、その`SKILL.md`（と参照資料）にある。
+marketplaceが公開・インストールするのは`development-convention` package一件だけである。package manifestは六つの自己完結skillを`skills/`から直接公開する。各skillの判断と手順は、その`SKILL.md`（と参照資料）にある。
 
 ## 責務の境界
 
