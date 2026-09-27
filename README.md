@@ -32,4 +32,4 @@ PYTHONDONTWRITEBYTECODE=1 bash /Users/naoya-nakamoriq/Documents/Github/harness-p
 PYTHONDONTWRITEBYTECODE=1 bash /Users/naoya-nakamoriq/Documents/Github/harness-pluginsv2/scripts/validate.sh /Users/naoya-nakamoriq/Documents/Github/harness-pluginsv2/development-convention-plugins
 ```
 
-`scripts/validate.sh`は先に兄弟checkout `../harness-tools/tools/validate-plugin-repository.py`（保守toolの唯一の参照元。無ければ止まる）でroot契約を検査し、CIは`.github/workflows/validate.yml`で`harness-tools`を兄弟checkoutして`harness-tools/ci/validate.sh`で同じcommandを実行する。repository固有検証は、manifest、直接公開境界、各skill文書の自己完結性（兄弟の中身へのpathの参照が無いこと）を検査する。文章や判断の意味品質は対象を実読して評価する。
+`scripts/validate.sh`は先に兄弟checkout `../harness-tools/tools/validate-plugin-repository.py`（保守toolの唯一の参照元。無ければ止まる）でroot契約を検査し、CIは`.github/workflows/validate.yml`で`harness-tools`を兄弟checkoutして`harness-tools/ci/validate.sh`で同じcommandを実行する。repository固有検証は、各入口から自分の参照資料へ直接届くことと、各skill文書の自己完結性（兄弟の中身へのpathの参照が無いこと）を検査する。文章や判断の意味品質は対象を実読して評価する。
